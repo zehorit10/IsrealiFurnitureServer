@@ -48,7 +48,6 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
     minlength: 5,
     maxlength: 50
   },
@@ -58,19 +57,16 @@ const userSchema = new mongoose.Schema({
         street: {
           type: String,
           minlength: 5,
-          maxlength: 255,
-          required: true
+          maxlength: 255
         },
         number: {
           type: Number,
-          min: 0,
-          required: true
+          min: 0
         },
         city: {
           type: String,
           minlength: 5,
-          maxlength: 255,
-          required: true
+          maxlength: 255
         }
       }
     ],
@@ -81,16 +77,16 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.pre("save", async function (next) {
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(this.password, salt);
-    this.password = passwordHash;
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
+// userSchema.pre("save", async function (next) {
+//   try {
+//     const salt = await bcrypt.genSalt(10);
+//     const passwordHash = await bcrypt.hash(this.password, salt);
+//     this.password = passwordHash;
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// });
 
 userSchema.methods.isValidPassword = async function (newPassword) {
   try {
@@ -100,21 +96,6 @@ userSchema.methods.isValidPassword = async function (newPassword) {
   }
 };
 
-userSchema.methods.generateAuthToken = function () {
-  try {
-    return jwt.sign(
-      {
-        _id: this._id,
-        role: this.role,
-        iat: new Date().getTime(),
-        exp: new Date().setDate(new Date().getDate() + 1)
-      },
-      JWT_SECRET
-    );
-  } catch (err) {
-    throw new Error(err);
-  }
-};
 const User = new mongoose.model("users", userSchema);
 
 const validateUser = {

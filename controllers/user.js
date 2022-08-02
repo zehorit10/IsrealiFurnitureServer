@@ -1,7 +1,25 @@
+const jwt = require('jsonwebtoken');
 const { User } = require("../models/User");
 
 // user controller
 module.exports = {
+    login: async (req, res) => {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email, password });
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found"
+            });
+        }   
+        const token = jwt.sign({ id: user._id }, "ZEHORIT", {
+            expiresIn: "1h"
+        });
+        return res.json({
+            token,
+            isAuth: true,
+            role: user.role
+        });
+    },
     // create user
     create: async (req, res) => {
         try {
