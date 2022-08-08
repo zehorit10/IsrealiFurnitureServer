@@ -11,7 +11,7 @@ module.exports = {
                 message: "User not found"
             });
         }   
-        const token = jwt.sign({ id: user._id }, "ZEHORIT", {
+        const token = jwt.sign({ id: user._id, role: user.role}, "ZEHORIT", {
             expiresIn: "1h"
         });
         return res.json({
@@ -30,21 +30,23 @@ module.exports = {
             // chack if user is saved
             if (user) {
                 // send user
-                res.send(user);
+                res.json({register: true});
             }else{
                 // send error
-                res.status(400).send("User not created");
+                res.status(400).json({register: false});
             }
         } catch (error) {
             // send error
-            res.status(400).send(error); 
+            res.status(400).json({register: false});
         }
     },
     // get all users
     getAll: async (req, res) => {
         try {
+            let filter = {};
+            if (res.locals.role === "employee") filter = { employee: res.locals.role === "employee" || res.locals.role === "customer" };
             // get all users
-            const users = await User.find();
+            const users = await User.find(filter);
             // check if users are found
             if (users) {
                 // send users
@@ -70,6 +72,22 @@ module.exports = {
             res.status(400).send(error);
         }
     }, 
+    getProfile: async (req, res) => {
+        try {
+            // get user by id
+            const user = await User.findById(res.locals.user_id);
+            // unset password
+            user.password = undefined;
+            // check if user is found
+            if (user) {
+                // send user
+                res.send(user);
+            }
+        } catch (error) {
+            // send error
+            res.status(400).send(error);
+        }
+    },
     // update user
     update: async (req, res) => {
         try {
@@ -80,6 +98,20 @@ module.exports = {
                 // send user
                 res.send(user);
             }
+        } catch (error) {
+            // send error
+            res.status(400).send(error);
+        }
+    },
+    updateProfile: async (req, res) => {
+        try {
+            // get user by id
+            const user = await User.findByIdAndUpdate(res.locals.user_id, req.body, { new: true });
+            // check if updated
+            if (user) {
+                // send user
+                res.send(user);
+            } 
         } catch (error) {
             // send error
             res.status(400).send(error);

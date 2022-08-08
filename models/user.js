@@ -12,12 +12,7 @@ const JWT_SECRET = "ZEHORIT";
     "password":"",
     "role":"",
     "name":"",
-    "phone":"",
-    "address":{
-      "street":"",
-      "number":"", 
-      "city":""
-    }
+    "phone":""
   }
  */
 
@@ -32,7 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    minlength: 8,
+    minlength: 2,
     maxlength: 1024,
     required: true
   },
@@ -50,26 +45,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 5,
     maxlength: 50
-  },
-  address: {
-    type: [
-      {
-        street: {
-          type: String,
-          minlength: 5,
-          maxlength: 255
-        },
-        number: {
-          type: Number,
-          min: 0
-        },
-        city: {
-          type: String,
-          minlength: 5,
-          maxlength: 255
-        }
-      }
-    ],
   },
   date: {
     type: Date,
@@ -109,10 +84,6 @@ const validateUser = {
       .min(8)
       .max(255)
       .required(),
-    confirmPassword: Joi.string()
-      .min(8)
-      .max(255)
-      .required(),
     name: Joi.string()
       .min(1)
       .max(50)
@@ -121,17 +92,6 @@ const validateUser = {
       .min(5)
       .max(50)
       .required()
-  }),
-  address: Joi.object().keys({
-    street: Joi.string()
-      .min(5)
-      .max(255)
-      .required(),
-    city: Joi.string()
-      .min(5)
-      .max(255)
-      .required(),
-    number: Joi.number().min(0).required(),
   }),
   login: Joi.object().keys({
     email: Joi.string()

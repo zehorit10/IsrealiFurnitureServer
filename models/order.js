@@ -20,6 +20,11 @@ const orderSchema = new Schema({
     }],
     required: true
   },
+  cost: {
+    type: Number,
+    min: 0,
+    required: true
+  },
   isCart: {
     type: Boolean,
     default: true
@@ -35,8 +40,11 @@ const orderSchema = new Schema({
   salesDetails:{
     type: Object,
     default: {}
+  },
+  date: {
+    type: Date,
+    default: Date.now
   }
-
 });
 
 const validateOrder = {
@@ -48,7 +56,9 @@ const validateOrder = {
         quantity: Joi.number().required()
       })
     ).min(1).required(),
-    shipAddress: Joi.string().required()
+    shipAddress: Joi.string().required(),
+    cost: Joi.number().min(0).required()
+
   })
 };
 

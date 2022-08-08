@@ -80,9 +80,7 @@ const validateProduct = {
     stock: Joi.number().min(0).required(),
     discount: Joi.number().min(0).max(100),
     image: Joi.string().required(),
-    description: Joi.string()
-      .min(10)
-      .max(255),
+    description: Joi.string().min(10).max(255),
     isAvailable: Joi.boolean()
   }),
 }

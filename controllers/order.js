@@ -5,6 +5,7 @@ module.exports = {
     // create order
     create: async (req, res) => {
         try {
+            //לבדוק אם ללקוח הספציפי יש הזמנה פתוחה
             // create order
             const newOrder = new Order(req.body);
             // save order
@@ -24,9 +25,11 @@ module.exports = {
     },
     // get all orders
     getAll: async (req, res) => {
+        let filter = {};
+        if (res.locals.role === "customer") filter = { customer: res.locals.user_id };
         try {
             // get all orders
-            const orders = await Order.find();
+            const orders = await Order.find(filter);
             // check if orders are found
             if (orders) {
                 // send orders
