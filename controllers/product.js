@@ -42,15 +42,17 @@ module.exports = {
     },
     // get product by id
     getById: async (req, res) => {
+        console.log(123456789);
         try {
             // get product by id
             const product = await Product.findById(req.params.id);
             // check if product is found
             if (product) {
                 // send product
-                res.send(product);
+                res.json(product);
             }
         } catch (error) {
+            console.log(error);
             // send error
             res.status(400).send(error);
         }

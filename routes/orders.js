@@ -5,14 +5,19 @@ var router = express.Router();
 
 /* GET orders listing. */
 router.get('/', isAuth, orderController.getAll);
-router.get('/cart', isAuth, (req, res) => res.json({ cart: true }));
+/* GET cart listing. */
+router.get('/cart', isAuth, orderController.cart);
 /* Get order by id. */
 router.get('/:id', isAuth, orderController.getById);
 /* Create order. */
 router.post('/', isAuth, orderController.create);
+/* Add to cart. */
+router.post('/addToCart', isAuth, orderController.addToCart);
+/* Remove from cart. */
+router.put('/removeFromCart', isAuth, orderController.removeFromCart);
+/* chackout */
+router.put('/checkout', isAuth, orderController.checkout);
 /* Update order. */
-router.put('/:id', isAuth, orderController.update);
-/* Delete order. */
-router.delete('/:id', isAuth, orderController.delete);
+router.put('/status', isAuth, isEmployee, orderController.updateStatus);
 
 module.exports = router;

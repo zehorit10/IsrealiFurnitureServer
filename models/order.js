@@ -2,6 +2,20 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const Schema = mongoose.Schema;
 
+/*{
+  "customer":"62b09b001eda80be4c5bc655",
+  "items":{
+    ["product":"62d556694c6ae6d5e4b8c9d0", "quantity":"3"],
+    ["product":"62d556de4c6ae6d5e4b8c9d2", "quantity":"2"]
+  },
+  "cost":"500",
+  "isCart":"true",
+  "shipAddress":"aporzim 19",
+  "delivery":"Pending",
+  "salesDetails":""
+}*/
+
+
 const orderSchema = new Schema({
   customer: {
     type: Schema.Types.ObjectId,
@@ -20,26 +34,27 @@ const orderSchema = new Schema({
     }],
     required: true
   },
+  ////////////////////////////////////////////////////////////////
   cost: {
     type: Number,
     min: 0,
-    required: true
+    default: 0
   },
   isCart: {
     type: Boolean,
     default: true
   },
   shipAddress: {
-    type: String,
-    required: true
+    type: String
   },
+  /*
+  1 = Pending
+  2 = Delivered
+  3 = Canceled
+  */
   delivery: {
     type: String,
-    default: "Pending"
-  },
-  salesDetails:{
-    type: Object,
-    default: {}
+    default: "1"
   },
   date: {
     type: Date,

@@ -15,4 +15,4 @@ function generatePair() {
     fs.openSync('./keys/private.pem', 'w');
     fs.writeFileSync('./keys/private.pem', privateKey, 'utf8');
 }
-//generatePair();
+// generatePair();

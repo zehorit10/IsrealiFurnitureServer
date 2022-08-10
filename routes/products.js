@@ -7,7 +7,7 @@ var { isAuth, isAdmin, isEmployee} = require('../middlewares/auth');
 var router = express.Router();
 
 /* GET products listing. */
-router.get('/:category', productController.getAll);
+// router.get('/:category', productController.getAll);
 
 router.get('/catalog/:category', productController.getAll);
 
