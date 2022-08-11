@@ -39,17 +39,21 @@ router.post("/reset-password", async function (req, res, next) {
         // create transporter object with smtp server details
         var transporter = nodemailer.createTransport({
             service: 'Outlook',
-            // port: 2525,
+            // port: 587,
             auth: {
-                user: 'shugipro@outlook.co.il',
-                pass: 'mother2022'
+                user: 'IsrealiFurniture@outlook.co.il',
+                pass: 'Aa242424!'
             },
             secure: false,
-            host: 'smtp-mail.outlock.com'
+            secureConnection: false, // TLS requires secureConnection to be false
+            host: 'smtp-mail.outlock.com',
+            tls: {
+                ciphers:'SSLv3'
+            }
         });
 
         var mailOptions = {
-            from: 'shugipro@outlook.co.il',
+            from: 'IsrealiFurniture@outlook.co.il',
             // to: req.user.mail,
             to: `${data.email}`,
             subject: 'Reset Password',
