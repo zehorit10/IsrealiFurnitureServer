@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
+var jwt = require('jsonwebtoken'); 
 
 //DB CONCTION
 const mongoose = require('mongoose');
@@ -31,6 +32,46 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+// creating socket io instance
+var io = require("socket.io")(server, {
+  cors: {
+    origin: "*"
+  }
+});
+
+io.use(function (socket, next) {
+  if (socket.handshake.query && socket.handshake.query.token) {
+    jwt.verify(socket.handshake.query.token, 'ZEHORIT', function (err, decoded) {
+      if (err) {
+        console.log(error);
+        return next(new Error('Authentication error'));
+      }
+      socket.decoded = decoded;
+      next();
+    });
+  }
+  else {
+    next(new Error('Authentication error'));
+  }
+})
+  .on("connection", (socket) => {
+
+    console.log("connected");
+
+
+    socket.on("send_message", (data) => {
+      console.log(data);
+      data.name = socket.decoded.name;
+      data.role = socket.decoded.role;
+      io.emit("receive_message", data);
+    });
+
+    
+    socket.on("disconnect", () => {
+      console.log("User Disconnected", socket.id);
+    });
+  });
 
 /**
  * Listen on provided port, on all network interfaces.

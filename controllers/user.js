@@ -25,7 +25,7 @@ module.exports = {
             });
         }  
 
-        const token = jwt.sign({ id: user._id, role: user.role}, "ZEHORIT", {
+        const token = jwt.sign({ id: user._id, name:user.name, role: user.role}, "ZEHORIT", {
             expiresIn: "1h"
         });
         return res.json({
